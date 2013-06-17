@@ -18,7 +18,7 @@
         
         BOOL isArray = [value isKindOfClass:[NSArray class]];
         
-        Class classToMap = [model mappingRules][inputKey];
+        Class classToMap = [model keyToClassMappingRules][inputKey];
         
         NSString *propertyName = [[model keyToPropertyNameReplacementRules] valueForKey:inputKey];
         propertyName = propertyName?propertyName:inputKey;
