@@ -85,7 +85,7 @@ When you get your json, You have to pass dictionary representation of it to meth
     
     [client getPath:kGetAppsPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
     	//start parsing
-        self.model = [FeedModel mapObjectFromDictionary:[responseObject         valueForKey:@"feed"]];
+        self.model = [FeedModel mapObjectFromDictionary:[responseObject valueForKey:@"feed"]];
         //do whatever you want — see example
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
