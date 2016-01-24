@@ -12,6 +12,8 @@
 
 + (instancetype)mapObjectFromDictionary:(NSDictionary *)data {
     
+    data = [self removeNullsFromDictionary:data];
+    
     TinyMappingModel *model = [[self alloc] init];
     for (NSString *inputKey in [data allKeys]) {
         id value = data[inputKey];
@@ -30,7 +32,11 @@
                 [model setValue:[classToMap mapObjectFromDictionary:value] forKey:propertyName];
             }
         } else {
-            [model setValue:value forKey:propertyName];
+            if ([value isEqual:[NSNull null]]){
+                
+            } else {
+                [model setValue:value forKey:propertyName];
+            }
         }
     }
     return model;
@@ -67,6 +73,38 @@
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+}
+
+- (void)setValue:(id)value forKey:(NSString *)key {
+    if ([value isEqual:[NSNull null]]){
+        
+    } else {
+        [super setValue:value forKey:key];
+    }
+}
+
+
+//TODO: add support of nested arrays
++ (NSDictionary *)removeNullsFromDictionary:(NSDictionary *)dictionary {
+    
+    NSMutableDictionary *prunedDictionary = [dictionary mutableCopy];
+    
+    for (NSString * key in [prunedDictionary allKeys])
+    {
+        if ([[prunedDictionary objectForKey:key] isKindOfClass:[NSNull class]]) {
+            [prunedDictionary removeObjectForKey:key];
+            continue;
+        }
+        
+        if ([[prunedDictionary objectForKey:key] isKindOfClass:[NSDictionary class]]){
+            NSDictionary *temp = [self removeNullsFromDictionary:[dictionary objectForKey:key]];
+            [prunedDictionary setObject:temp forKey:key];
+        } else if ([[prunedDictionary objectForKey:key] isKindOfClass:[NSArray class]]){
+            //TODO:
+        }
+    }
+    
+    return prunedDictionary;
 }
 
 @end
